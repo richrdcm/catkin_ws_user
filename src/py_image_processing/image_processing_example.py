@@ -16,7 +16,7 @@ from matplotlib import pyplot as plt
 class image_converter:
 
   def __init__(self):
-    self.image_pub = rospy.Publisher("image_topic_2",Image, queue_size=1)
+    self.image_pub = rospy.Publisher("/image_processing/bin_img",Image, queue_size=1)
 
     self.bridge = CvBridge()
     self.image_sub = rospy.Subscriber("/app/camera/rgb/image_raw",Image,self.callback, queue_size=1)
@@ -95,19 +95,19 @@ class image_converter:
 
     bi_hsv = cv2.merge((h,s,v))
 
-    titles = ['Original Image', 'GRAY','BINARY','GAUSS','EDGE','BI_RGB','BI_HSV']
-    images = [cv_image, gray, thresh1,dst,edge_img,bi_rgb,bi_hsv]
-
-    for i in xrange(7):
-      plt.subplot(2,4,i+1),plt.imshow(images[i],'gray')
-      plt.title(titles[i])
-      plt.xticks([]),plt.yticks([])
-
-    plt.show()
-    print("Done")
+    # titles = ['Original Image', 'GRAY','BINARY','GAUSS','EDGE','BI_RGB','BI_HSV']
+    # images = [cv_image, gray, thresh1,dst,edge_img,bi_rgb,bi_hsv]
+    #
+    # for i in xrange(7):
+    #   plt.subplot(2,4,i+1),plt.imshow(images[i],'gray')
+    #   plt.title(titles[i])
+    #   plt.xticks([]),plt.yticks([])
+    #
+    # plt.show()
+    # print("Done")
 
     try:
-      self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))
+      self.image_pub.publish(self.bridge.cv2_to_imgmsg(thresh1, "mono8"))
     except CvBridgeError as e:
       print(e)
 
