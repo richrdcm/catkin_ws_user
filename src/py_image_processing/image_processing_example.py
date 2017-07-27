@@ -7,7 +7,7 @@ import cv2
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
-import matplotlib
+#import matplotlib
 #matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 
@@ -112,8 +112,8 @@ class image_converter:
       print(e)
 
 def main(args):
-  ic = image_converter()
   rospy.init_node('image_converter', anonymous=True)
+  ic = image_converter()
   try:
     rospy.spin()
   except KeyboardInterrupt:
