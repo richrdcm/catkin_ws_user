@@ -5,6 +5,9 @@ import sys
 import rospy
 import cv2
 from std_msgs.msg import String
+from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Point
+from geometry_msgs.msg import Quaternion
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 #import matplotlib
@@ -110,6 +113,24 @@ class image_converter:
       self.image_pub.publish(self.bridge.cv2_to_imgmsg(thresh1, "mono8"))
     except CvBridgeError as e:
       print(e)
+      
+        br = tf.TransformBroadcaster()
+    br.sendTransform((inv_tvec[0]/100, inv_tvec[1]/100, inv_tvec[2]/100),
+                     tf.transformations.quaternion_from_euler(x, y, z),
+                     rospy.Time(0),
+                     "camera",
+                     "world")
+
+    Master = Pose()
+    Master.position.x = inv_tvec[0]/100
+    Master.position.y = inv_tvec[1]/100
+    Master.position.z = inv_tvec[2]/100
+    q = tf.transformations.quaternion_from_euler(x, y, z)
+    Master.orientation.x = q[0]
+    Master.orientation.y = q[1]
+    Master.orientation.z = q[2]
+    Master.orientation.w = q[3]
+    self.pub_pose.publish(Master)
 
 def main(args):
   rospy.init_node('image_converter', anonymous=True)
