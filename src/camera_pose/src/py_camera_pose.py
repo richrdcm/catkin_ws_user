@@ -1,19 +1,13 @@
 #!/usr/bin/env python
-import roslib
 import sys
 import rospy
 import cv2
 import numpy as np
-#from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from geometry_msgs.msg import Pose
-from geometry_msgs.msg import Point
-from geometry_msgs.msg import Quaternion
 from cv_bridge import CvBridge, CvBridgeError
-#import matplotlib
 import math
 import tf
-#from matplotlib import pyplot as plt
 
 class image_converter:
 
@@ -136,17 +130,7 @@ class image_converter:
                      "camera",
                      "world")
 
-    Master = Pose()
-    Master.position.x = inv_tvec[0]/100
-    Master.position.y = inv_tvec[1]/100
-    Master.position.z = inv_tvec[2]/100
-    q = tf.transformations.quaternion_from_euler(x, y, z)
-    Master.orientation.x = q[0]
-    Master.orientation.y = q[1]
-    Master.orientation.z = q[2]
-    Master.orientation.w = q[3]
-    self.pub_pose.publish(Master)
-
+    
 def main(args):
   rospy.init_node('camera_pose', anonymous=True)
   ic = image_converter()
@@ -155,7 +139,6 @@ def main(args):
     rospy.spin()
   except KeyboardInterrupt:
     print("Shutting down")
-#  cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     main(sys.argv)
