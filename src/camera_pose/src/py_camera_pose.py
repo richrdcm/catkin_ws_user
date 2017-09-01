@@ -14,7 +14,6 @@ class image_converter:
   def __init__(self):
     self.image_pub_gray = rospy.Publisher("/camera_pose/gray_img",Image, queue_size=1)
     self.image_pub_bi = rospy.Publisher("/camera_pose/bin_img",Image, queue_size=1)
-    self.pub_pose = rospy.Publisher("/Master/pose",Pose, queue_size=1)
 
     self.bridge = CvBridge()
     self.image_sub = rospy.Subscriber("/app/camera/rgb/image_raw",Image,self.callback, queue_size=1)
